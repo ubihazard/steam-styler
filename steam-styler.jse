@@ -1,0 +1,90 @@
+/* Until VALVE provides something like "user.css",
+// we will have to use this. */
+
+/* ### Configuration begin ### */
+
+/* Your Steam installation path: slashes must be doubled */
+var steamPath = "C:\\Program Files (x86)\\Steam";
+
+/* Desired CSS theme file name */
+var themeFile = (WScript.Arguments.length == 0) ? "default.css"
+: WScript.Arguments(0);
+
+/* ### Configuration end ### */
+
+var isDebugging = false;
+var fso = WScript.CreateObject ("Scripting.FileSystemObject");
+
+var currDir = fso.GetAbsolutePathName (".");
+var themePath = fso.BuildPath (currDir, themeFile);
+var debugPath = fso.BuildPath (currDir, "debug.css");
+var cssPath = fso.BuildPath (steamPath + "\\steamui\\css", "6.css");
+
+function fileExists (path) {
+  return fso.FileExists (path);
+}
+
+function readFile (path) {
+  var forReading = 1;
+  var file = fso.OpenTextFile (path, forReading);
+  var text = file.ReadAll();
+  file.Close();
+  return text;
+}
+
+function writeFile (path, text) {
+  var forWriting = 2;
+  var file = fso.OpenTextFile (path, forWriting, true);
+  file.Write (text);
+  file.Close();
+  return true;
+}
+
+function trim (str) {
+  var len = str.length;
+  if (len === 0) return str;
+  while (str.charCodeAt (--len) < 32);
+  return str.substring (0, len + 1);
+}
+
+function message (msg) {
+  WScript.Echo (msg);
+}
+
+function doNothing(){}
+var debug = isDebugging ? message : doNothing;
+
+function exit (code) {
+  WScript.Quit ((code === undefined) ? 0 : code);
+}
+
+function error (msg, code) {
+  message (msg);
+  WScript.Quit ((code === undefined) ? 1 : code ? code : 1);
+}
+
+var cssBegin = "/* ### custom theme css begin ### */";
+var cssEnd = "/* ### custom theme css end ### */";
+var crlf = "\r\n";
+
+/* Read CSS */
+if (!fileExists (cssPath)) error ("Couldn't find the STEAM CSS to modify. Is the STEAM installation path correct? (" + cssPath + ")");
+if (!fileExists (themePath)) error ("Couldn't find the custom theme file. (" + themePath + ")");
+
+var steamCss = readFile (cssPath);
+var themeCss = readFile (themePath);
+
+/* Remove previous theme */
+var cssBeginIdx = steamCss.indexOf (cssBegin);
+var cssEndIdx = steamCss.indexOf (cssEnd);
+
+if (cssBeginIdx !== -1 && cssEndIdx !== -1) {
+  debug ("Previous theme found");
+  steamCss = trim (steamCss.substring (0, cssBeginIdx)
+  + steamCss.substring (cssEndIdx + cssEnd.length));
+}
+
+/* Merge and write back */
+writeFile (isDebugging ? debugPath : cssPath, steamCss
++ crlf + crlf + cssBegin + crlf + crlf + themeCss
++ crlf + cssEnd + crlf);
