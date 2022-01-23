@@ -1,0 +1,543 @@
+<!-- Valve Steam CSS theme switcher
+---- GUI HTML application version -->
+<html>
+<head>
+  <title>Steam Styler</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <hta:application
+    id="steamstyler"
+    applicationname="Steam Styler"
+    version="1.0"
+    border="dialog"
+    innerborder="no"
+    caption="yes"
+    sysmenu="yes"
+    maximizebutton="no"
+    minimizebutton="yes"
+    icon="app.ico"
+    scroll="no"
+    scrollflat="yes"
+    singleinstance="yes"
+    showintaskbar="yes"
+    contextmenu="no"
+    selection="no"
+  />
+  <meta http-equiv="x-ua-compatible" content="ie=9"/>
+  <style type="text/css">
+body {
+  border:0;
+  padding: 0;
+  margin: 0;
+  color: #999;
+  background-color: #303036;
+  /* IE bug: without this empty SVG line on body
+  // the SVG on drop-down style chooser won't show up.
+  // It kind of triggers proper SVG initialization
+  // or some sort of it? Discovered by accident. */
+  background-image: url("data:image/svg+xml;charset=UTF-8,");
+  font-family: 'Segoe UI', Verdana, Arial, sans-serif;
+}
+
+/* Needed to apply window background gradient */
+#content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#303036,endColorstr=#28282c)";
+}
+
+/* Center all controls vertically */
+form {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  padding-left: 1em;
+  padding-right: 1em;
+  transform: translateY(-50%);
+  box-sizing: border-box;
+}
+
+/* Style chooser */
+.select-box {
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+}
+
+.select-box select {
+  cursor: pointer;
+  font-size: 100%;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  padding: .5em 0;
+  background: none transparent;
+  border: 0 none;
+  opacity: 0;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+}
+
+.select-box label {
+  display: block;
+  color: #999;
+  position: relative;
+  padding: .5em 1em;
+  border-radius: 6px;
+  height: 1.5em;
+  background: #202024;
+}
+
+.select-box:hover label {
+  color: #fff;
+  background: #3e4047;
+}
+
+.disabled label {
+  color: #999 !important;
+  background: #282828 !important;
+}
+
+.select-box label::after {
+  content: " ";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2em;
+  height: 100%;
+  background-size: .6em;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Ctitle%3Edown-arrow%3C%2Ftitle%3E%3Cg%20fill%3D%22%23ffffff%22%3E%3Cpath%20d%3D%22M10.293%2C3.293%2C6%2C7.586%2C1.707%2C3.293A1%2C1%2C0%2C0%2C0%2C.293%2C4.707l5%2C5a1%2C1%2C0%2C0%2C0%2C1.414%2C0l5-5a1%2C1%2C0%2C1%2C0-1.414-1.414Z%22%20fill%3D%22%23ffffff%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  opacity: .6;
+}
+
+.select-box:hover label::after {
+  opacity: 1;
+}
+
+.disabled:hover label::after {
+  opacity: .6 !important;
+}
+
+/* Buttons */
+#buttons {
+  margin-top: 2em;
+  text-align: center;
+}
+
+a, a:link, a:visited {
+  padding: .35em;
+  text-decoration: none;
+  color: #78d !important;
+  border: 1px #78d solid;
+  border-radius: 6px;
+  background: none;
+}
+
+a:hover {
+  color: #9af !important;
+  border-color: #9af !important;
+  background-color: #34343a;
+}
+
+a:active {
+  color: #faa0ff !important;
+  border-color: #faa0ff !important;
+}
+
+.disabled a {
+  color: #666 !important;
+  border-color: #666 !important;
+}
+
+#apply, #preview {
+  margin-right: 1em;
+}
+  </style>
+  <script type="text/javascript">
+var isDebugging = false;
+
+var steamPathDefault = "C:\\Program Files (x86)\\Steam";
+var styleFileDefault = "default.css";
+
+var isDead = false;
+var fso;
+
+var configPath;
+var stylesDir;
+var previewDir;
+var debugPath;
+var steamPath;
+var styleFile;
+var cssPath;
+var styles;
+
+var icnError = 16;
+var icnWarn = 48;
+var icnInfo = 64;
+var icnAsk = 32;
+
+/* Dialogs */
+
+var btnOk = 0;
+var btnOkCancel = 1;
+var btnAbortIgnoreRetry = 2;
+var btnYesNoCancel = 3;
+var btnYesNo = 4;
+var btnRetryCancel = 5;
+
+var retOk = 1;
+var retCancel = 2;
+var retAbort = 3;
+var retRetry = 4;
+var retIgnore = 5;
+var retYes = 6;
+var retNo = 7;
+
+function dialog (type, btns, msg, title) {
+  var shell = new ActiveXObject ("WScript.Shell");
+  return shell.Popup (msg, 0, title, type | btns);
+}
+
+function dlgError (btns, msg, title) {
+  return dialog (icnError, btns, msg, title);
+}
+
+function dlgWarn (btns, msg, title) {
+  return dialog (icnWarn, btns, msg, title);
+}
+
+function dlgInfo (btns, msg, title) {
+  return dialog (icnInfo, btns, msg, title);
+}
+
+function dlgAsk (btns, msg, title) {
+  return dialog (icnAsk, btns, msg, title);
+}
+
+function msgError (msg, title) {
+  return dlgError (btnOK, msg, title);
+}
+
+function msgWarn (msg, title) {
+  return dlgWarn (btnOk, msg, title);
+}
+
+function msgInfo (msg, title) {
+  return dlgInfo (btnOk, msg, title);
+}
+
+function msgAsk (msg, title) {
+  return dlgAsk (btnOkCancel, msg, title);
+}
+
+function message (msg) {
+  alert (msg);
+}
+
+function silence (msg) {}
+var debug = isDebugging ? message : silence;
+
+/* File system */
+
+function fileExists (path) {
+  return fso.FileExists (path);
+}
+
+function dirExists (path) {
+  return fso.FolderExists (path);
+}
+
+function readFile (path) {
+  var forReading = 1;
+  var file = fso.OpenTextFile (path, forReading);
+  var text = file.ReadAll();
+  file.Close();
+  return text;
+}
+
+function writeFile (path, text) {
+  var forWriting = 2;
+  var file = fso.OpenTextFile (path, forWriting, true);
+  file.Write (text);
+  file.Close();
+  return fileExists (path);
+}
+
+/* String */
+
+function trimRight (str) {
+  var len = str.length;
+  if (len === 0) return str;
+  while (str.charCodeAt (--len) < 32);
+  return str.substring (0, len + 1);
+}
+
+/* HTML DOM */
+
+function $ (id) {
+  return document.getElementById (id);
+}
+
+function getAttr (e, name) {
+  return e.getAttribute (name) || "";
+}
+
+function hasClass (e, name) {
+  var curr = getAttr (e, "class");
+  var idx = curr.indexOf (name);
+  return idx != -1 && (idx + name.length == curr.length
+  || curr.charCodeAt (idx + name.length) == 32);
+}
+
+function addClass (e, name) {
+  if (!hasClass (e, name)) e.setAttribute ("class"
+  , getAttr (e, "class") + ' ' + name);
+}
+
+function removeClass (e, name) {
+  e.setAttribute ("class", getAttr (e, "class")
+  .replace (new RegExp ("\s?" + name + "\s?", "i"), ""));
+}
+
+/* --- */
+
+function disable() {
+  if (isDead) return;
+  isDead = true;
+  addClass ($("style"), "disabled");
+  addClass ($("buttons"), "disabled");
+  $("styles").setAttribute ("disabled", "yes");
+}
+
+function enable() {
+  removeClass ($("style"), "disabled");
+  removeClass ($("buttons"), "disabled");
+  $("styles").removeAttribute ("disabled");
+  isDead = false;
+}
+
+function error (msg) {
+  disable();
+  msgWarn (msg);
+  return false;
+}
+
+function placeWindow() {
+  var width = Math.max (screen.availWidth / 5, 400);
+  var height = Math.max (screen.availHeight / 5, 240);
+  window.resizeTo (width, height);
+  window.moveTo ((screen.availWidth - width) / 2
+  , (screen.availHeight - height) / 2);
+  window.focus();  
+}
+
+/* Configuration */
+
+function readConfig (path) {
+  if (!fileExists (path)) {
+    steamPath = steamPathDefault;
+    styleFile = styleFileDefault;
+
+    if (!writeConfig (path)) {
+      return false;
+    }
+  }
+
+  var forReading = 1;
+  var file = fso.OpenTextFile (path, forReading);
+
+  steamPath = file.ReadLine();
+  if (!dirExists (steamPath)) {
+    steamPath = steamPathDefault;
+  }
+
+  styleFile = file.ReadLine();
+  if (!fileExists (fso.BuildPath (stylesDir, styleFile))) {
+    styleFile = styleFileDefault;
+  }
+
+  file.Close();
+  return true;
+}
+
+function writeConfig (path) {
+  var forWriting = 2;
+  var file = fso.OpenTextFile (path, forWriting, true);
+  file.WriteLine (steamPath);
+  file.WriteLine (styleFile);
+  file.Close();
+  return fileExists (path);
+}
+
+/* Styles */
+
+function loadStyles() {
+  styles = [];
+  if (!dirExists (stylesDir)) {
+    return false;
+  }
+
+  /* Get list of CSS files */
+  var selected = 0;
+  var dir = fso.GetFolder (stylesDir);
+  var coll = new Enumerator (dir.files);
+  for (; !coll.atEnd(); coll.moveNext()) {
+    var ext = fso.GetExtensionName (coll.item());
+    if (ext.toLowerCase() != "css") continue;
+    var name = fso.GetFileName (coll.item());
+    styles.push (name);
+    if (name == styleFile) {
+      selected = styles.length - 1;
+    }
+  }
+  if (styles.length == 0) styles.push (styleFileDefault);
+
+  /* Build HTML for selector control */
+  var box = $("style");
+  var html = '<label id="style-name" for="styles">' + styleFile
+  + '</label><select id="styles" onchange="styleSelected()">';
+  for (var i = 0; i != styles.length; ++i) {
+    html += "<option value=\"" + i + "\">" + styles[i] + "</option>";
+  }
+  html += '</select>';
+  box.innerHTML = html;
+  $("styles").selectedIndex = selected;
+  removeClass (box, "disabled");
+
+  return true;
+}
+
+function styleSelected() {
+  if (isDead) return;
+  var list = $("styles");
+  styleFile = styles[list.selectedIndex];
+  $("style-name").innerText = styleFile;
+}
+
+/* Actions */
+
+function applyStyle() {
+  if (isDead) return;
+  disable();
+
+  var cssBegin = "/* ### custom theme css begin ### */";
+  var cssEnd = "/* ### custom theme css end ### */";
+  var crlf = "\r\n";
+
+  /* Read CSS */
+  var stylePath = fso.BuildPath (stylesDir, styleFile);
+  var cssPath = fso.BuildPath (steamPath + "\\steamui\\css", "6.css");
+  if (!fileExists (stylePath)) return error ("Couldn't find the custom style file. (" + stylePath + ")");
+  if (!fileExists (cssPath)) return error ("Couldn't find the STEAM CSS to modify. Is the STEAM installation path correct? (" + cssPath + ")");
+  var styleCss = readFile (stylePath);
+  var steamCss = readFile (cssPath);
+
+  /* Remove previous style */
+  var cssBeginIdx = steamCss.indexOf (cssBegin);
+  var cssEndIdx = steamCss.indexOf (cssEnd);
+
+  if (cssBeginIdx !== -1 && cssEndIdx !== -1) {
+    debug ("Previous style found");
+    steamCss = trimRight (steamCss.substring (0, cssBeginIdx)
+    + steamCss.substring (cssEndIdx + cssEnd.length));
+  }
+
+  /* Merge and write back */
+  writeFile (isDebugging ? debugPath : cssPath, steamCss
+  + crlf + crlf + cssBegin + crlf + crlf + styleCss
+  + crlf + cssEnd + crlf);
+  writeConfig (configPath);
+
+  /* Prevent rapid switch of CSS styles to avoid
+  // potentially crashing Steam */
+  setTimeout (function() {enable();}, 1000);
+}
+
+function previewStyle() {
+  var images = [
+    styleFile.replace (".css", ".png"),
+    styleFile.replace (".css", ".jpg"),
+    styleFile.replace (".css", ".jpeg"),
+    styleFile.replace (".css", ".webp")
+  ];
+
+  for (var i = 0; i != images.length; ++i) {
+    var imgFile = fso.BuildPath (previewDir, images[i]);
+    if (fileExists (imgFile)) {
+      var shell = new ActiveXObject ("WScript.Shell");
+      shell.Run (imgFile, 1, false);
+      return;
+    }
+  }
+
+  msgInfo (styleFile + " doesn't have a preview available.");
+}
+
+function steamPathSet() {
+  if (isDead) return;
+
+  var root = fso.GetParentFolderName (steamPath);
+  if (!dirExists (root)) root = fso.GetParentFolderName (steamPathDefault);
+
+  var flagNoNewFolder = 1;
+  var flagOnlyFsDir = 512;
+  var shell = new ActiveXObject ("Shell.Application");
+  var browser = shell.BrowseForFolder (0, steamPath, flagNoNewFolder
+  | flagOnlyFsDir, root); 
+  if (!browser) {
+    return dirExists (steamPath) ? steamPath
+    : steamPathDefault; 
+  } else {
+    steamPath = browser.Self.Path;
+    writeConfig (configPath);
+  }
+}
+
+/* === */
+
+function main() {
+  /* Position window on screen */
+  placeWindow();
+
+  /* Initialize */
+  fso = new ActiveXObject ("Scripting.FileSystemObject");
+  var currDir = fso.GetAbsolutePathName (".");
+  configPath = fso.BuildPath (currDir, "config");
+  debugPath = fso.BuildPath (currDir, "debug.css");
+  stylesDir = fso.BuildPath (currDir, "styles");
+  previewDir = fso.BuildPath (currDir, "gallery");
+
+  /* Read configuration */
+  if (!readConfig (configPath)) {
+    return error ("Couldn't read the configuration file.");
+  }
+
+  /* Get list of available styles */
+  if (!loadStyles()) {
+    return error ("Couldn't load the CSS style list.");
+  }
+}
+  </script>
+</head>
+<body onload="main()" ondragstart="return false;" ondrop="return false;">
+<div id="content">
+<form action="#">
+  <div id="style" class="select-box disabled">
+    <label id="style-name" for="styles">default.css</label>
+    <select id="styles" onchange="styleSelected()" disabled="yes">
+      <option value="0">default.css</option>
+    </select>
+  </div>
+  <div id="buttons">
+    <a id="apply" title="Apply the chosen style" href="javascript:void()" onclick="applyStyle()">Apply</a>
+    <a id="preview" title="Preview style" href="javascript:void()" onclick="previewStyle()">Preview</a>
+    <a id="steam-path" title="Set the custom Steam installation path" href="javascript:void()" onclick="steamPathSet()">Steam path...</a>
+  </div>
+</form>
+</div>
+</body>
+</html>
