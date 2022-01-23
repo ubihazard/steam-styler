@@ -1,5 +1,5 @@
-Steam Theme Switcher
-====================
+Steam CSS Theme Switcher
+========================
 
 Download the code as ZIP file and extract its contents into any directory.
 
@@ -13,4 +13,4 @@ An example of a correct-looking target field:
 
 Press `Win+E` to open Windows Explorer, then press `Ctrl+L` to change location and go to `%APPDATA%\Microsoft\Windows\Start Menu\Programs`. Copy the shortcut you created into this location.
 
-Press `Win` (Windows) key to open Start menu and launch **Steam Styler** to modify the Steam theme.
+Press `Win` (Windows) key to open Start menu and launch **Steam Styler** to modify the Steam theme. If Steam is running you should notice changes immediately.
