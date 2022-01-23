@@ -1,24 +1,28 @@
-/* Until VALVE provides something like "user.css",
+/* Valve Steam CSS theme switcher
+// Console version for automation and use in scripts
+//
+// Until VALVE provides something like "user.css",
 // we will have to use this. */
 
-/* ### Configuration begin ### */
-
-/* Your Steam installation path: slashes must be doubled */
-var steamPath = "C:\\Program Files (x86)\\Steam";
-
-/* Desired CSS theme file name */
-var themeFile = (WScript.Arguments.length == 0) ? "default.css"
-: WScript.Arguments(0);
-
-/* ### Configuration end ### */
-
 var isDebugging = false;
-var fso = WScript.CreateObject ("Scripting.FileSystemObject");
 
-var currDir = fso.GetAbsolutePathName (".");
-var themePath = fso.BuildPath (currDir, themeFile);
-var debugPath = fso.BuildPath (currDir, "debug.css");
-var cssPath = fso.BuildPath (steamPath + "\\steamui\\css", "6.css");
+var steamPathDefault = "C:\\Program Files (x86)\\Steam";
+var styleFileDefault = "default.css";
+
+var cssBegin = "/* ### custom theme css begin ### */";
+var cssEnd = "/* ### custom theme css end ### */";
+var crlf = "\r\n";
+
+/* Dialogs */
+
+function message (msg) {
+  WScript.Echo (msg);
+}
+
+function silence (msg) {}
+var debug = isDebugging ? message : silence;
+
+/* File system */
 
 function fileExists (path) {
   return fso.FileExists (path);
@@ -40,19 +44,16 @@ function writeFile (path, text) {
   return true;
 }
 
-function trim (str) {
+/* String */
+
+function trimRight (str) {
   var len = str.length;
   if (len === 0) return str;
   while (str.charCodeAt (--len) < 32);
   return str.substring (0, len + 1);
 }
 
-function message (msg) {
-  WScript.Echo (msg);
-}
-
-function doNothing(){}
-var debug = isDebugging ? message : doNothing;
+/* --- */
 
 function exit (code) {
   WScript.Quit ((code === undefined) ? 0 : code);
@@ -63,28 +64,65 @@ function error (msg, code) {
   WScript.Quit ((code === undefined) ? 1 : code ? code : 1);
 }
 
-var cssBegin = "/* ### custom theme css begin ### */";
-var cssEnd = "/* ### custom theme css end ### */";
-var crlf = "\r\n";
+/* Initialize */
+var fso = WScript.CreateObject ("Scripting.FileSystemObject");
+var currDir = fso.GetAbsolutePathName (".");
+var stylesDir = fso.BuildPath (currDir, "styles");
+var configPath = fso.BuildPath (currDir, "config");
+var debugPath = fso.BuildPath (currDir, "debug.css");
+
+/* Read configuration */
+var steamPath;
+var styleFile;
+
+if (fileExists (configPath)) {
+  var forReading = 1;
+  var file = fso.OpenTextFile (path, forReading);
+
+  steamPath = file.ReadLine();
+  if (!dirExists (steamPath)) {
+    steamPath = steamPathDefault;
+  }
+
+  styleFile = file.ReadLine();
+  if (!fileExists (fso.BuildPath (stylesDir, styleFile))) {
+    styleFile = styleFileDefault;
+  }
+
+  file.Close();
+} else {
+  steamPath = steamPathDefault;
+  styleFile = styleFileDefault;
+}
+
+/* Override the style name from command line */
+var args = WScript.Arguments;
+if (args.length != 0) {
+  var name = args(0);
+  if (fileExists (fso.BuildPath (stylesDir, name))) {
+    styleFile = name;
+  }
+}
 
 /* Read CSS */
+var stylePath = fso.BuildPath (stylesDir, styleFile);
+var cssPath = fso.BuildPath (steamPath + "\\steamui\\css", "6.css");
+if (!fileExists (stylePath)) error ("Couldn't find the custom style file. (" + stylePath + ")");
 if (!fileExists (cssPath)) error ("Couldn't find the STEAM CSS to modify. Is the STEAM installation path correct? (" + cssPath + ")");
-if (!fileExists (themePath)) error ("Couldn't find the custom theme file. (" + themePath + ")");
-
+var styleCss = readFile (stylePath);
 var steamCss = readFile (cssPath);
-var themeCss = readFile (themePath);
 
-/* Remove previous theme */
+/* Remove previous style */
 var cssBeginIdx = steamCss.indexOf (cssBegin);
 var cssEndIdx = steamCss.indexOf (cssEnd);
 
 if (cssBeginIdx !== -1 && cssEndIdx !== -1) {
-  debug ("Previous theme found");
-  steamCss = trim (steamCss.substring (0, cssBeginIdx)
+  debug ("Previous style found");
+  steamCss = trimRight (steamCss.substring (0, cssBeginIdx)
   + steamCss.substring (cssEndIdx + cssEnd.length));
 }
 
 /* Merge and write back */
 writeFile (isDebugging ? debugPath : cssPath, steamCss
-+ crlf + crlf + cssBegin + crlf + crlf + themeCss
++ crlf + crlf + cssBegin + crlf + crlf + styleCss
 + crlf + cssEnd + crlf);
