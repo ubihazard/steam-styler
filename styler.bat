@@ -1,4 +1,4 @@
 @echo off
 cd /d "%~dp0"
 
-start /LOW wscript steam-styler.jse %1
+ñscript.exe //B //NoLogo styler.jse %1
