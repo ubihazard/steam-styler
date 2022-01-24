@@ -40,7 +40,7 @@ Steam Styler comes with a command-line version of its tool for use together with
 
 In its simplest form it can be just a Windows shortcut which would reapply your configured style upon execution.
 
-Manually create a shortcut to `styler.jse` file and rename it to “Steam Styler (Reapply)”. Right-click the created shortcut and choose “Properties”. Change the “Target” field by prepending `wscript.exe //E:JScript //NoLogo`<kbd>&nbsp;</kbd> in the beginning (note the space character at the end). Change the icon to Styler icon included in the archive. Click `Apply` and `OK` to dismiss the dialog.
+Manually create a shortcut to `styler.jse` file and rename it to “Steam Styler (Reapply)”. Right-click the created shortcut and choose “Properties”. Change the “Target” field by prepending `wscript.exe //E:JScript //NoLogo ` in the beginning (note the space character at the end). Change the icon to Styler icon included in the archive. Click `Apply` and `OK` to dismiss the dialog.
 
 An example of a correct-looking target field:
 

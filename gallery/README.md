@@ -25,13 +25,13 @@ All previews must be saved in `WebP` format for maximum compression and visual f
 
 Images in the `gallery` folder, except `default.webp` and `ubi.webp`, must be saved with the maximum *lossy* quality preset. Only the two original styles are preserved lossless for wider demonstration purposes. Example conversion command with `cwebp` encoder [by Google](https://developers.google.com/speed/webp/docs/precompiled "Download cwebp encoder"):
 
-```sh
+```console
 cwebp -q 100 style.png -o style.webp
 ```
 
 Web previews in the `gallery/preview` subfolder are `600px` wide and are encoded with lesser quality setting of `90`:
 
-```sh
+```console
 cwebp -q 90 -resize 600 0 style.png -o style.webp
 ```
 
