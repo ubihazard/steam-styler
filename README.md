@@ -10,17 +10,17 @@ How to use
 
 Download the code as Zip file and extract its contents into any directory. Run `install.bat` to create a shortcut in Start menu. Press <kbd>Win</kbd> key and launch **Steam Styler**.
 
-![Steam Styler](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/styler.webp)
+![Steam Styler](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/styler.webp "Steam Styler")
 
 It is recommended for **Steam** to be running so that you can observe changes in real-time.
 
-![Ubi style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/ubi.webp)
+![Ubi style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/ubi.webp "Ubi style")
 
 You can see all currently available styles in the [gallery](https://github.com/ubihazard/steam-styler/tree/main/gallery/ "Style previews").
 
-Steam will revert back to original style with each update. So you will need to run Steam Styler again to reapply your style.
+Steam will revert back to original style with each update. So you will need to run Styler again to reapply your style.
 
-![Default style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/default.webp)
+![Default style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/default.webp "Default style")
 
 This is already easy to do with the GUI version, but it is technically possible to automate the process even further so that Styler would run every time Steam updates. How exactly you are going to go about this is out of scope of this project and this guide, but the command-line version of Styler will certainly be of great help here.
 
@@ -52,7 +52,7 @@ C:\Windows\System32\wscript.exe //E:JScript //NoLogo "C:\Steam Styler\styler.jse
 
 Press <kbd>Win+E</kbd> to open Windows Explorer, then press <kbd>Ctrl+L</kbd> to change location and go to `%APPDATA%\Microsoft\Windows\Start Menu\Programs`. Copy the shortcut you created into this location and delete the original one.
 
-### Apply any style automatically
+### Apply styles automatically
 
 You can override the configured style and apply any other style by providing it as a command line argument at the end:
 

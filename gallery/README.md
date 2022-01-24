@@ -10,13 +10,13 @@ WebP image viewer, such as [qimgv](https://github.com/easymodo/qimgv "Download W
 Available styles
 ----------------
 
-![Ubi style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/ubi.webp)
+![Ubi style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/ubi.webp "Ubi style")
 
-[Ubi](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/ubi.webp)
+[Ubi](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/ubi.webp "Enlarge")
 
-![Default style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/default.webp)
+![Default style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/default.webp "Default style")
 
-[Default](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/default.webp)
+[Default](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/default.webp "Enlarge")
 
 Creating gallery previews
 -------------------------
