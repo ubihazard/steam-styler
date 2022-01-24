@@ -22,7 +22,7 @@ Steam will revert back to original style with each update. So you will need to r
 
 ![Default style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/default.webp "Default style")
 
-This is already easy to do with the GUI version, but it is technically possible to automate the process even further so that Styler would run every time Steam updates. How exactly you are going to go about this is out of scope of this project and this guide, but the command-line version of Styler will certainly be of great help here.
+This is already easy to do with the GUI version, but it’s technically possible to automate the process even further so that Styler would run every time Steam updates. How exactly you are going to go about this is out of scope of this project and this guide, but the [command-line version](https://github.com/ubihazard/steam-styler#command-line-version) of Styler will certainly be of great help here.
 
 Configuration
 -------------
