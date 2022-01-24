@@ -63,4 +63,4 @@ wscript.exe //E:JScript //NoLogo "C:\Steam Styler\styler.jse" ubi.css
 Buy me a ☕
 ----------
 
-If you like Steam Styler, [buy me a coffee](https://www.buymeacoffee.com/ubihazard)!
+If you like Steam Styler, [buy me a coffee](https://buymeacoff.ee/ubihazard "Support")!
