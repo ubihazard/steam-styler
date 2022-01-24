@@ -16,18 +16,18 @@ It is recommended for **Steam** to be running so that you can observe changes in
 
 ![Ubi style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/ubi.webp)
 
-You can see all currently available styles in the [gallery](https://github.com/ubihazard/steam-styler/gallery/ "Style previews").
+You can see all currently available styles in the [gallery](https://github.com/ubihazard/steam-styler/tree/main/gallery/ "Style previews").
 
 Steam will revert back to original style with each update. So you will need to run Steam Styler again to reapply your style.
 
 ![Default style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/default.webp)
 
-This is already easy with the GUI version, but it is technically possible to automate the process even further so that Styler would run every time Steam updates. How exactly you are going to do this is out of scope of this project, but the command-line version of Styler will certainly be helpful here.
+This is already easy to do with the GUI version, but it is technically possible to automate the process even further so that Styler would run every time Steam updates. How exactly you are going to go about this is out of scope of this project and this guide, but the command-line version of Styler will certainly be of great help here.
 
 Configuration
 -------------
 
-Steam Styler must be pointed to correct Steam installation path in order to be able to modify its CSS. If your Steam isn't installed at default location, launch Styler and click the "Steam path..." button to make it aware of your Steam whereabouts.
+Steam Styler must be pointed to correct Steam installation folder in order to be able to modify its CSS. If your Steam isn’t installed at default location, launch Styler and click the “Steam path...” button to make it aware of your Steam whereabouts.
 
 ### Clean uninstall
 
@@ -40,21 +40,25 @@ Steam Styler comes with a command-line version of its tool for use together with
 
 In its simplest form it can be just a Windows shortcut which would reapply your configured style upon execution.
 
-Manually create a shortcut to `styler.jse` file and rename it to “Steam Styler (Reapply)”. Right-click the created shortcut and choose “Properties”. Change the “Target” field by prepending `wscript.exe //E:JScript //NoLogo <kbd>&nbsp;</kbd>` in the beginning (note the space character at the end). Change the icon to Styler icon included in the archive. Click `Apply` and `OK` to close the dialog.
+Manually create a shortcut to `styler.jse` file and rename it to “Steam Styler (Reapply)”. Right-click the created shortcut and choose “Properties”. Change the “Target” field by prepending `wscript.exe //E:JScript //NoLogo`<kbd>&nbsp;</kbd> in the beginning (note the space character at the end). Change the icon to Styler icon included in the archive. Click `Apply` and `OK` to dismiss the dialog.
 
 An example of a correct-looking target field:
 
-`C:\Windows\System32\wscript.exe //E:JScript //NoLogo "C:\Steam Styler\styler.jse"`
+```sh
+C:\Windows\System32\wscript.exe //E:JScript //NoLogo "C:\Steam Styler\styler.jse"
+```
 
 (Assuming you extracted Styler into `C:\Steam Styler`.)
 
-Press <kbd>Win+E</kbd> to open Windows Explorer, then press <kbd>Ctrl+L</kbd> to change location and go to `%APPDATA%\Microsoft\Windows\Start Menu\Programs`. Copy the shortcut you created into this location and delete the original.
+Press <kbd>Win+E</kbd> to open Windows Explorer, then press <kbd>Ctrl+L</kbd> to change location and go to `%APPDATA%\Microsoft\Windows\Start Menu\Programs`. Copy the shortcut you created into this location and delete the original one.
 
 ### Apply any style automatically
 
 You can override the configured style and apply any other style by providing it as a command line argument at the end:
 
-`wscript.exe //E:JScript //NoLogo "C:\Steam Styler\styler.jse" ubi.css`
+```sh
+wscript.exe //E:JScript //NoLogo "C:\Steam Styler\styler.jse" ubi.css
+```
 
 Buy me a ☕
 ----------
