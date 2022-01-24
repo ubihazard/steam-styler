@@ -3,12 +3,12 @@ Steam CSS Theme Switcher
 
 ![Steam Styler](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gfx/icon/256.png)
 
-Manage Steam CSS customizations.
+Manage Steam CSS customizations with comfort.
 
 How to use
 ----------
 
-Download the code as Zip file and extract its contents into any directory. Run `install.bat` to create a shortcut in Start menu. Press <kbd>Win</kbd> key and launch **Steam Styler**.
+Download the [latest release](https://github.com/ubihazard/steam-styler/releases) and unzip its contents into any directory. Run `install.bat` to create a shortcut in Start menu. Press <kbd>Win</kbd> key and launch **Steam Styler**.
 
 ![Steam Styler](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/styler.webp "Steam Styler")
 
