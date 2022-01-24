@@ -28,6 +28,10 @@ function fileExists (path) {
   return fso.FileExists (path);
 }
 
+function dirExists (path) {
+  return fso.FolderExists (path);
+}
+
 function readFile (path) {
   var forReading = 1;
   var file = fso.OpenTextFile (path, forReading);
@@ -77,7 +81,7 @@ var styleFile;
 
 if (fileExists (configPath)) {
   var forReading = 1;
-  var file = fso.OpenTextFile (path, forReading);
+  var file = fso.OpenTextFile (configPath, forReading);
 
   steamPath = file.ReadLine();
   if (!dirExists (steamPath)) {
