@@ -16,7 +16,7 @@ It is recommended for **Steam** to be running so that you can observe changes in
 
 ![Ubi style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/ubi.webp "Ubi style")
 
-You can see all currently available styles in the [gallery](https://github.com/ubihazard/steam-styler/tree/main/gallery/ "Style previews").
+You can see all currently available styles in the [gallery](https://github.com/ubihazard/steam-styler/tree/main/gallery#available-styles "Style previews").
 
 Steam will revert back to original style with each update. So you will need to run Styler again to reapply your style.
 
