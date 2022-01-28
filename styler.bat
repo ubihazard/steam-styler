@@ -2,4 +2,4 @@
 cd /d "%~dp0"
 
 :: Example command line usage
-ñscript.exe //E:JScript //B //NoLogo styler.jse %1
+cscript.exe //E:JScript //B //NoLogo styler.jse %1
