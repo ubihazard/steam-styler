@@ -1,28 +1,28 @@
 Steam CSS Theme Switcher
 ========================
 
-![Steam Styler](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gfx/icon/256.png)
+![Steam Styler](/gfx/icon256.png)
 
 Manage Steam CSS customizations with comfort.
 
 How to use
 ----------
 
-Download the [latest release](https://github.com/ubihazard/steam-styler/releases) and unzip its contents into any directory. Run `install.bat` to create a shortcut in Start menu. Press <kbd>Win</kbd> key and launch **Steam Styler**.
+Download the [latest release](/releases) and unzip its contents into any directory. Run `install.bat` to create a shortcut in Start menu. Press <kbd>Win</kbd> key and launch **Steam Styler**.
 
-![Steam Styler](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/styler.webp "Steam Styler")
+![Steam Styler](/gallery/preview/styler.webp "Steam Styler")
 
 It is recommended for **Steam** to be running so that you can observe changes in real-time.
 
-![Ubi style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/ubi.webp "Ubi style")
+![Ubi style](/gallery/preview/ubi.webp "Ubi style")
 
-You can see all currently available styles in the [gallery](https://github.com/ubihazard/steam-styler/tree/main/gallery#available-styles "Style previews").
+You can see all currently available styles in the [gallery](/gallery#available-styles "Style previews").
 
 Steam will revert back to original style with each update. So you will need to run Styler again to reapply your style.
 
-![Default style](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/preview/default.webp "Default style")
+![Default style](/gallery/preview/default.webp "Default style")
 
-This is already easy to do with the GUI version, but it’s technically possible to automate the process even further so that Styler would run every time Steam updates. How exactly you are going to go about this is out of scope of this project and this guide, but the [command-line version](https://github.com/ubihazard/steam-styler#command-line-version) of Styler will certainly be of great help here.
+This is already easy to do with the GUI version, but it’s technically possible to automate the process even further so that Styler would run every time Steam updates. How exactly you are going to go about this is out of scope of this project and this guide, but the [command-line version](/#command-line-version) of Styler will certainly be of great help here.
 
 Configuration
 -------------
