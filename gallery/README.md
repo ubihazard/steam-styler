@@ -12,11 +12,11 @@ Available styles
 
 ![Ubi style](/gallery/preview/ubi.webp "Ubi style")
 
-[Ubi](/gallery/ubi.webp "Enlarge")
+[Ubi](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/ubi.webp "Enlarge")
 
 ![Default style](/gallery/preview/default.webp "Default style")
 
-[Default](/gallery/default.webp "Enlarge")
+[Default](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/default.webp "Enlarge")
 
 Creating gallery previews
 -------------------------
