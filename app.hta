@@ -128,33 +128,54 @@ form {
   text-align: center;
 }
 
-a, a:link, a:visited {
+#buttons a, #buttons a:link, #buttons a:visited {
   padding: .35em;
   text-decoration: none;
-  color: #78d !important;
+  color: #78d;
   border: 1px #78d solid;
   border-radius: 6px;
   background: none;
 }
 
-a:hover {
-  color: #9af !important;
-  border-color: #9af !important;
+#buttons a:hover {
+  color: #9af;
+  border-color: #9af;
   background-color: #34343a;
 }
 
-a:active {
-  color: #faa0ff !important;
-  border-color: #faa0ff !important;
+#buttons a:active {
+  color: #faa0ff;
+  border-color: #faa0ff;
+}
+
+#apply, #preview {
+  margin-right: 1em;
+}
+
+#status {
+  color: #666;
+  font-size: 75%;
+  text-align: center;
+  position: relative;
+  top: 2em;
+}
+
+#status a, #status a:link, #status a:visited {
+  color: #666;
+  text-decoration: underline;
+}
+
+#status a:hover {
+  color: #9af;
+}
+
+#status a:active {
+  color: #faa0ff;
 }
 
 .disabled a {
   color: #666 !important;
   border-color: #666 !important;
-}
-
-#apply, #preview {
-  margin-right: 1em;
 }
   </style>
   <script type="text/javascript">
@@ -497,6 +518,11 @@ function steamPathSet() {
   }
 }
 
+function buyCoffee() {
+  var shell = new ActiveXObject ("WScript.Shell");
+  shell.Run ("https://buymeacoff.ee/ubihazard", 1, false);
+}
+
 /* === */
 
 function main() {
@@ -536,6 +562,9 @@ function main() {
     <a id="apply" title="Apply the chosen style" href="javascript:void()" onclick="applyStyle()">Apply</a>
     <a id="preview" title="Preview style" href="javascript:void()" onclick="previewStyle()">Preview</a>
     <a id="steam-path" title="Set the custom Steam installation path" href="javascript:void()" onclick="steamPathSet()">Steam path...</a>
+  </div>
+  <div id="status">
+    Version 1.0.1 by <a id="coffee" title="Buy me a coffee!" href="javascript:void()" onclick="buyCoffee()">Ubihazard</a>
   </div>
 </form>
 </div>
