@@ -1,5 +1,5 @@
 <p align="center"><img alt="Steam Styler" src="/icon/icon256.png"/></p>
-<h1>Steam Styler</h1>
+<h1 align="center">Steam Styler</h1>
 
 <!--
 ![Steam Styler](/icon/icon256.png)
