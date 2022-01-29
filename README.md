@@ -10,7 +10,7 @@ Steam Styler
 
 Steam CSS theme switcher.
 
-Manage Steam CSS customizations with comfort.
+Manage Steam CSS customizations with ease.
 
 How to use
 ----------
