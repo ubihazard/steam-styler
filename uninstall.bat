@@ -8,4 +8,4 @@ set lnkpath=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Steam Styler.lnk
 del /q /f "%lnkpath%"
 
 :: Restore default Steam CSS style
-wscript.exe //E:JScript //NoLogo //B styler.jse default.css
+cscript.exe //E:JScript //NoLogo //B styler.jse default.css
