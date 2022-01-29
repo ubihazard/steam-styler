@@ -1,7 +1,9 @@
+<center>
+![Steam Styler](/icon/icon256.png)
+
 Steam Styler
 ============
-
-![Steam Styler](/icon/icon256.png)
+</center>
 
 Steam CSS Theme Switcher.
 
