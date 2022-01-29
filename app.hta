@@ -348,12 +348,12 @@ function error (msg) {
 }
 
 function placeWindow() {
-  var width = Math.max (screen.availWidth / 5, 400);
-  var height = Math.max (screen.availHeight / 5, 240);
+  var width  = Math.max (400 * /*screen.availWidth*/screen.width / 1920, 400);
+  var height = Math.max (width * 0.6, 240);
   window.resizeTo (width, height);
   window.moveTo ((screen.availWidth - width) / 2
   , (screen.availHeight - height) / 2);
-  window.focus();  
+  window.focus();
 }
 
 /* Configuration */
@@ -508,10 +508,10 @@ function steamPathSet() {
   var flagOnlyFsDir = 512;
   var shell = new ActiveXObject ("Shell.Application");
   var browser = shell.BrowseForFolder (0, steamPath, flagNoNewFolder
-  | flagOnlyFsDir, root); 
+  | flagOnlyFsDir, root);
   if (!browser) {
     return dirExists (steamPath) ? steamPath
-    : steamPathDefault; 
+    : steamPathDefault;
   } else {
     steamPath = browser.Self.Path;
     writeConfig (configPath);
@@ -520,7 +520,7 @@ function steamPathSet() {
 
 function buyCoffee() {
   var shell = new ActiveXObject ("WScript.Shell");
-  shell.Run ("https://buymeacoff.ee/ubihazard", 1, false);
+  shell.Run ("https://www.buymeacoffee.com/ubihazard", 1, false);
 }
 
 /* === */
