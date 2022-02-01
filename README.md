@@ -51,7 +51,7 @@ Manually create a shortcut to `styler.jse` file and rename it to “Steam Styler
 
 An example of a correct-looking target field:
 
-```sh
+```bat
 C:\Windows\System32\wscript.exe //E:JScript //NoLogo "C:\Steam Styler\styler.jse"
 ```
 
@@ -63,11 +63,11 @@ Press <kbd>Win+E</kbd> to open Windows Explorer, then press <kbd>Ctrl+L</kbd> to
 
 You can override the configured style and apply any other style by providing it as a command line argument at the end:
 
-```sh
+```bat
 wscript.exe //E:JScript //NoLogo "C:\Steam Styler\styler.jse" ubi.css
 ```
 
-Buy me a ☕
-----------
+Support
+-------
 
-If you like Steam Styler, [buy me a coffee](https://buymeacoff.ee/ubihazard "Support")!
+If you like [Steam Styler](https://github.com/ubihazard/steam-styler), you can [buy me a ☕](https://www.buymeacoffee.com/ubihazard "Show support")!
