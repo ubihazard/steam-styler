@@ -10,16 +10,18 @@ WebP image viewer, such as [qimgv](https://github.com/easymodo/qimgv "Download W
 Available styles
 ----------------
 
-![Ubi style](/gallery/preview/ubi.webp "Ubi style")
+![Ubi style](preview/ubi.webp "Ubi style")
 
 [Ubi](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/ubi.webp "Enlarge")
 
-![Default style](/gallery/preview/default.webp "Default style")
+![Default style](preview/default.webp "Default style")
 
 [Default](https://raw.githubusercontent.com/ubihazard/steam-styler/main/gallery/default.webp "Enlarge")
 
 Creating gallery previews
 -------------------------
+
+*(If you wish to submit pull request with your style.)*
 
 All previews must be saved in `WebP` format for maximum compression and visual fidelity. `JPEG` is not allowed due to how bad it performs for screenshots, even with maximum quality preset.
 
