@@ -181,11 +181,13 @@ form {
   <script type="text/javascript">
 var isDebugging = false;
 
-var steamPathDefault = "C:\\Program Files (x86)\\Steam";
-var styleFileDefault = "default.css";
+//var steamPathDefault = "C:\\Program Files (x86)\\Steam";
+var styleFileDefault = "ubi.css";
+var cssModFileDefault = "6.css";
 
 var isDead = false;
 var fso;
+var shell;
 
 var configPath;
 var stylesDir;
@@ -193,7 +195,7 @@ var previewDir;
 var debugPath;
 var steamPath;
 var styleFile;
-var cssPath;
+var cssModFile;
 var styles;
 
 var icnError = 16;
@@ -219,7 +221,6 @@ var retYes = 6;
 var retNo = 7;
 
 function dialog (type, btns, msg, title) {
-  var shell = new ActiveXObject ("WScript.Shell");
   return shell.Popup (msg, 0, title, type | btns);
 }
 
@@ -286,6 +287,13 @@ function writeFile (path, text) {
   file.Write (text);
   file.Close();
   return fileExists (path);
+}
+
+function browseForFile() {
+  var obj = $("browseForFile");
+  obj.value = steamPath;
+  obj.click();
+  return obj.value;
 }
 
 /* String */
@@ -359,10 +367,11 @@ function placeWindow() {
 /* Configuration */
 
 function readConfig (path) {
-  if (!fileExists (path)) {
-    steamPath = steamPathDefault;
-    styleFile = styleFileDefault;
+  //steamPath = steamPathDefault;
+  styleFile = styleFileDefault;
+  cssModFile = cssModFileDefault;
 
+  if (!fileExists (path)) {
     if (!writeConfig (path)) {
       return false;
     }
@@ -371,14 +380,26 @@ function readConfig (path) {
   var forReading = 1;
   var file = fso.OpenTextFile (path, forReading);
 
-  steamPath = file.ReadLine();
-  if (!dirExists (steamPath)) {
-    steamPath = steamPathDefault;
+  if (file.AtEndOfStream) {
+    file.Close();
+    return false;
   }
+  /*steamPath = */file.ReadLine();
+  //if (!dirExists (steamPath)) {
+  //  steamPath = steamPathDefault;
+  //}
 
+  if (file.AtEndOfStream) {
+    file.Close();
+    return false;
+  }
   styleFile = file.ReadLine();
   if (!fileExists (fso.BuildPath (stylesDir, styleFile))) {
     styleFile = styleFileDefault;
+  }
+
+  if (!file.AtEndOfStream) {
+    cssModFile = file.ReadLine();
   }
 
   file.Close();
@@ -390,6 +411,7 @@ function writeConfig (path) {
   var file = fso.OpenTextFile (path, forWriting, true);
   file.WriteLine (steamPath);
   file.WriteLine (styleFile);
+  file.WriteLine (cssModFile);
   file.Close();
   return fileExists (path);
 }
@@ -451,9 +473,9 @@ function applyStyle() {
 
   /* Read CSS */
   var stylePath = fso.BuildPath (stylesDir, styleFile);
-  var cssPath = fso.BuildPath (steamPath + "\\steamui\\css", "6.css");
+  var cssPath = fso.BuildPath (steamPath + "\\steamui\\css", cssModFile);
   if (!fileExists (stylePath)) return error ("Couldn't find the custom style file. (" + stylePath + ")");
-  if (!fileExists (cssPath)) return error ("Couldn't find the STEAM CSS to modify. Is the STEAM installation path correct? (" + cssPath + ")");
+  if (!fileExists (cssPath)) return error ("Couldn't find the STEAM CSS to modify. Is the CSS path correct? (" + cssPath + ")");
   var styleCss = readFile (stylePath);
   var steamCss = readFile (cssPath);
 
@@ -489,7 +511,6 @@ function previewStyle() {
   for (var i = 0; i != images.length; ++i) {
     var imgFile = fso.BuildPath (previewDir, images[i]);
     if (fileExists (imgFile)) {
-      var shell = new ActiveXObject ("WScript.Shell");
       shell.Run (imgFile, 1, false);
       return;
     }
@@ -501,25 +522,57 @@ function previewStyle() {
 function steamPathSet() {
   if (isDead) return;
 
-  var root = fso.GetParentFolderName (steamPath);
-  if (!dirExists (root)) root = fso.GetParentFolderName (steamPathDefault);
-
-  var flagNoNewFolder = 1;
-  var flagOnlyFsDir = 512;
-  var shell = new ActiveXObject ("Shell.Application");
-  var browser = shell.BrowseForFolder (0, steamPath, flagNoNewFolder
-  | flagOnlyFsDir, root);
-  if (!browser) {
-    return dirExists (steamPath) ? steamPath
-    : steamPathDefault;
+  var path = browseForFile();
+  var idx = path.lastIndexOf ('.');
+  if (idx == -1 || path.indexOf (steamPath) == -1
+  || path.substr (idx + 1) !== "css") {
+    cssModFile = cssModFileDefault;
   } else {
-    steamPath = browser.Self.Path;
-    writeConfig (configPath);
+    idx = path.lastIndexOf ('\\');
+    if (idx == -1) {
+      cssModFile = cssModFileDefault;
+    } else {
+      cssModFile = path.substr (idx + 1);
+    }
   }
+  writeConfig (configPath);
+
+  //var root = fso.GetParentFolderName (steamPath);
+  //if (!dirExists (root)) root = fso.GetParentFolderName (steamPathDefault);
+  //
+  //var flagNoNewFolder = 1;
+  //var flagOnlyFsDir = 512;
+  //var browser = shell.BrowseForFolder (0, steamPath, flagNoNewFolder
+  //| flagOnlyFsDir, root);
+  //if (!browser) {
+  //  return dirExists (steamPath) ? steamPath
+  //  : steamPathDefault;
+  //} else {
+  //  steamPath = browser.Self.Path;
+  //  writeConfig (configPath);
+  //}
+}
+
+function getSteamPath() {
+  path = "";
+  try {
+    path = shell.RegRead ("HKLM\\SOFTWARE\\Valve\\Steam\\InstallPath");
+  } catch (e) {
+    try {
+      path = shell.RegRead ("HKLM\\SOFTWARE\\WOW6432Node\\Valve\\Steam\\InstallPath");
+    } catch (e) {
+      return "";
+    }
+  }
+  return fso.BuildPath (path, "steam.exe");
+}
+
+function getSteamDir (path) {
+  var idx = path.lastIndexOf ('\\');
+  return path.substr (0, idx);
 }
 
 function buyCoffee() {
-  var shell = new ActiveXObject ("WScript.Shell");
   shell.Run ("https://www.buymeacoffee.com/ubihazard", 1, false);
 }
 
@@ -530,6 +583,7 @@ function main() {
   placeWindow();
 
   /* Initialize */
+  shell = new ActiveXObject ("WScript.Shell");
   fso = new ActiveXObject ("Scripting.FileSystemObject");
   var currDir = fso.GetAbsolutePathName (".");
   configPath = fso.BuildPath (currDir, "config");
@@ -546,6 +600,19 @@ function main() {
   if (!loadStyles()) {
     return error ("Couldn't load the CSS style list.");
   }
+
+  /* Get Steam path */
+  steamPath = getSteamPath();
+  if (steamPath === "") {
+    return error ("Steam doesn't appear to be installed.");
+  }
+  if (!fileExists (steamPath)) {
+    return error ("Couldn't find Steam.");
+  }
+  steamPath = getSteamDir (steamPath);
+  if (!dirExists (steamPath)) {
+    return error ("Couldn't find Steam.");
+  }
 }
   </script>
 </head>
@@ -561,12 +628,13 @@ function main() {
   <div id="buttons">
     <a id="apply" title="Apply the chosen style" href="javascript:void()" onclick="applyStyle()">Apply</a>
     <a id="preview" title="Preview style" href="javascript:void()" onclick="previewStyle()">Preview</a>
-    <a id="steam-path" title="Set the custom Steam installation path" href="javascript:void()" onclick="steamPathSet()">Steam path...</a>
+    <a id="steam-path" title="Set the custom Steam installation path" href="javascript:void()" onclick="steamPathSet()">Steam CSS...</a>
   </div>
   <div id="status">
     Version 1.0.1 by <a id="coffee" title="Buy me a coffee!" href="javascript:void()" onclick="buyCoffee()">Ubihazard</a>
   </div>
 </form>
 </div>
+<input type="file" accept=".css" id="browseForFile" style="position:absolute;left:0;top:0;width:0;height:0;display:none"/>
 </body>
 </html>

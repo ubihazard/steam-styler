@@ -8,9 +8,15 @@ Steam Styler
 ============
 -->
 
-Steam CSS theme switcher.
+*This utility has become obsolete. Valve is now protecting Steam CSS files from changes, making it much harder to apply custom CSS styles. __You can still use this tool,__ but every time you restart Steam it will redownload the entire client to restore original CSS files, forcing you to run Steam Styler again, creating an endless loop of Steam updates each time you restart it, which is not a good user experience.*
 
-Manage Steam CSS customizations with ease.
+*As for me, I’ve simply reverted to using small library mode (just a list). I recommend using your desktop browser (not Steam client integrated browser) to actually browse the store, workshop, market, and manage your account. You will have to login twice, but it turned out to be very convenient because you can now use tabs to manage multiple Steam views and you won’t have to deal with forced marketing bullshit spam from Valve in your library.*
+
+Steam CSS theme switcher. You can use this tool to manage Steam CSS customizations with ease and hide the obnoxious “What’s New” section from the library view.
+
+Steam Styler is built as a [Microsoft HTML Application](https://learn.microsoft.com/en-us/previous-versions/ms536496(v=vs.85)) (HTA), which means it is open by nature, very lightweight, and doesn’t depend on any huge runtime.
+
+Also check out [Left 4 Dead launcher](https://github.com/ubihazard/l4d-launcher) built using similar approach.
 
 How to use
 ----------
@@ -19,24 +25,26 @@ Download the [latest release](https://github.com/ubihazard/steam-styler/releases
 
 ![Steam Styler](gallery/preview/styler.webp "Steam Styler")
 
-It is recommended for **Steam** to be running so that you can observe changes in real-time.
+**Steam** must be running first before running this tool.
 
 ![Ubi style](gallery/preview/ubi.webp "Ubi style")
 
-*Using Styler you can hide the obnoxious “What’s New” section from the library view.*
-
 You can see all currently available styles in the [gallery](https://github.com/ubihazard/steam-styler/tree/main/gallery#available-styles "Style previews").
 
-Steam will revert back to original style with each update. So you will need to run Styler again to reapply your style.
+Steam will revert back to original look <del>with each update</del> on each restart. So you will need to run Styler again to re-apply your style.
 
 ![Default style](gallery/preview/default.webp "Default style")
-
-This is already easy to do with the GUI version, but it’s technically possible to automate the process even further so that Styler would run every time Steam updates. How exactly you are going to go about this is out of scope of this project and this guide, but the [command-line version](https://github.com/ubihazard/steam-styler#command-line-version) of Styler will certainly be of great help here.
 
 Configuration
 -------------
 
-Steam Styler must be pointed to correct Steam installation folder in order to be able to modify its CSS. If your Steam isn’t installed at default location, launch Styler and click the “Steam path...” button to make it aware of your Steam whereabouts.
+Steam Styler must be pointed to the original Steam CSS file in order to be able to modify it. Use “Steam CSS...” button to point it to the correct CSS file. For example:
+
+```bat
+C:\Program Files (x86)\Steam\steamui\css\1010.css
+```
+
+The correct CSS file can be determined by trial and error, from the folder mentioned above. Note that future Steam updates can and do change CSS file names, so you might need to re-target different CSS file after a particular Steam update.
 
 ### Clean uninstall
 
@@ -45,31 +53,36 @@ Run `uninstall.bat` and move the Steam Styler folder into recycle bin.
 Command-line version
 --------------------
 
-Steam Styler comes with a command-line version of its tool for use together with scripting engines and other automation scenarios. The advantage of command line version is that it allows to apply styles quickly without going through GUI.
+The advantage of command-line version of this tool is that it allows to apply styles quickly without going through GUI.
 
-In its simplest form it can be just a Windows shortcut which would reapply your configured style upon execution.
-
-Manually create a shortcut to `styler.jse` file and rename it to “Steam Styler (Reapply)”. Right-click the created shortcut and choose “Properties”. Change the “Target” field by prepending `wscript.exe //E:JScript //NoLogo ` in the beginning (note the space character at the end). Change the icon to Styler icon included in the archive. Click `Apply` and `OK` to dismiss the dialog.
-
-An example of a correct-looking target field:
+Create a shortcut to `styler.jse` script file and rename it to “Steam Styler (Re-apply)”. Right-click the created shortcut and go to “Properties” tab. Change the “Target” field as follows:
 
 ```bat
 C:\Windows\System32\wscript.exe //E:JScript //NoLogo "C:\Steam Styler\styler.jse"
 ```
 
-(Assuming you extracted Styler into `C:\Steam Styler`.)
-
-Press <kbd>Win+E</kbd> to open Windows Explorer, then press <kbd>Ctrl+L</kbd> to change location and go to `%APPDATA%\Microsoft\Windows\Start Menu\Programs`. Copy the shortcut you created into this location and delete the original one.
-
-### Apply styles automatically
-
-You can override the configured style and apply any other style by providing it as a command line argument at the end:
+Start in:
 
 ```bat
-wscript.exe //E:JScript //NoLogo "C:\Steam Styler\styler.jse" ubi.css
+C:\Steam Styler
 ```
 
-Support
--------
+(Assuming you extracted Styler into `C:\Steam Styler`.)
 
-If you like [Steam Styler](https://github.com/ubihazard/steam-styler), you can [buy me a ☕](https://www.buymeacoffee.com/ubihazard "Show support")!
+Change the shortcut icon to Styler icon included in the download. Click `Apply` and `OK` to dismiss the dialog.
+
+Press <kbd>Win+E</kbd> to open Windows Explorer, then press <kbd>Ctrl+L</kbd> to change location and go to `%APPDATA%\Microsoft\Windows\Start Menu\Programs`. Copy the shortcut file you created into this location and delete the original.
+
+### Apply styles directly
+
+The configured (in GUI version) style can be overriden by providing it as a command line argument at the end of the shortcut target field:
+
+```bat
+cd /d "C:\Steam Styler"
+wscript.exe //E:JScript //NoLogo styler.jse ubi.css
+```
+
+⭐ Support
+---------
+
+If you like [Steam Styler](https://github.com/ubihazard/steam-styler), you can [buy me a ☕](https://www.buymeacoffee.com/ubihazard "Donate")!

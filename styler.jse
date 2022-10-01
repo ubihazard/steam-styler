@@ -6,8 +6,9 @@
 
 var isDebugging = false;
 
-var steamPathDefault = "C:\\Program Files (x86)\\Steam";
-var styleFileDefault = "default.css";
+//var steamPathDefault = "C:\\Program Files (x86)\\Steam";
+var styleFileDefault = "ubi.css";
+var cssModFileDefault = "6.css";
 
 var cssBegin = "/* ### custom theme css begin ### */";
 var cssEnd = "/* ### custom theme css end ### */";
@@ -57,6 +58,27 @@ function trimRight (str) {
   return str.substring (0, len + 1);
 }
 
+/* Steam */
+
+function getSteamPath() {
+  path = "";
+  try {
+    path = shell.RegRead ("HKLM\\SOFTWARE\\Valve\\Steam\\InstallPath");
+  } catch (e) {
+    try {
+      path = shell.RegRead ("HKLM\\SOFTWARE\\WOW6432Node\\Valve\\Steam\\InstallPath");
+    } catch (e) {
+      return "";
+    }
+  }
+  return fso.BuildPath (path, "steam.exe");
+}
+
+function getSteamDir (path) {
+  var idx = path.lastIndexOf ('\\');
+  return path.substr (0, idx);
+}
+
 /* --- */
 
 function exit (code) {
@@ -69,6 +91,7 @@ function error (msg, code) {
 }
 
 /* Initialize */
+var shell = new ActiveXObject ("WScript.Shell");
 var fso = WScript.CreateObject ("Scripting.FileSystemObject");
 var currDir = fso.GetAbsolutePathName (".");
 var stylesDir = fso.BuildPath (currDir, "styles");
@@ -83,20 +106,46 @@ if (fileExists (configPath)) {
   var forReading = 1;
   var file = fso.OpenTextFile (configPath, forReading);
 
-  steamPath = file.ReadLine();
-  if (!dirExists (steamPath)) {
-    steamPath = steamPathDefault;
+  if (file.AtEndOfStream) {
+    file.Close();
+    error ("Error loading configuration file.");
   }
+  /*steamPath = */file.ReadLine();
+  //if (!dirExists (steamPath)) {
+  //  steamPath = steamPathDefault;
+  //}
 
+  if (file.AtEndOfStream) {
+    file.Close();
+    error ("Error loading configuration file.");
+  }
   styleFile = file.ReadLine();
   if (!fileExists (fso.BuildPath (stylesDir, styleFile))) {
     styleFile = styleFileDefault;
   }
 
+  if (!file.AtEndOfStream) {
+    cssModFile = file.ReadLine();
+  }
+
   file.Close();
 } else {
-  steamPath = steamPathDefault;
+  //steamPath = steamPathDefault;
   styleFile = styleFileDefault;
+  cssModFile = cssModFileDefault;
+}
+
+/* Get Steam path */
+steamPath = getSteamPath();
+if (steamPath === "") {
+  error ("Steam doesn't appear to be installed.");
+}
+if (!fileExists (steamPath)) {
+  error ("Couldn't find Steam.");
+}
+steamPath = getSteamDir (steamPath);
+if (!dirExists (steamPath)) {
+  error ("Couldn't find Steam.");
 }
 
 /* Override the style name from command line */
@@ -110,9 +159,9 @@ if (args.length != 0) {
 
 /* Read CSS */
 var stylePath = fso.BuildPath (stylesDir, styleFile);
-var cssPath = fso.BuildPath (steamPath + "\\steamui\\css", "6.css");
+var cssPath = fso.BuildPath (steamPath + "\\steamui\\css", cssModFile);
 if (!fileExists (stylePath)) error ("Couldn't find the custom style file. (" + stylePath + ")");
-if (!fileExists (cssPath)) error ("Couldn't find the STEAM CSS to modify. Is the STEAM installation path correct? (" + cssPath + ")");
+if (!fileExists (cssPath)) error ("Couldn't find the STEAM CSS to modify. Is the CSS path correct? (" + cssPath + ")");
 var styleCss = readFile (stylePath);
 var steamCss = readFile (cssPath);
 
