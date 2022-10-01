@@ -10,7 +10,7 @@ Steam Styler
 
 *This utility has become obsolete. Valve is now protecting Steam CSS files from changes, making it much harder to apply custom CSS styles. __You can still use this tool,__ but every time you restart Steam it will redownload the entire client to restore original CSS files, forcing you to run Steam Styler again, creating an endless loop of Steam updates each time you restart it, which is not a good user experience.*
 
-*As for me, I’ve simply reverted to using small library mode (just a list). I recommend using your desktop browser (not Steam client integrated browser) to actually browse the store, workshop, market, and manage your account. You will have to login twice, but it turned out to be very convenient because you can now use tabs to manage multiple Steam views and you won’t have to deal with forced marketing bullshit spam from Valve in your library.*
+*As for me, I’ve simply reverted to using small library mode (just a list). I recommend using your desktop browser (not Steam client integrated browser) to actually browse the store, workshop, market, and manage your public profile and account. You will have to login twice, but it turned out to be very convenient because you can now use tabs to manage multiple Steam views and you won’t have to deal with forced marketing bullshit spam from Valve in your library.*
 
 Steam CSS theme switcher. You can use this tool to manage Steam CSS customizations with ease and hide the obnoxious “What’s New” section from the library view.
 
@@ -53,7 +53,7 @@ Run `uninstall.bat` and move the Steam Styler folder into recycle bin.
 Command-line version
 --------------------
 
-The advantage of command-line version of this tool is that it allows to apply styles quickly without going through GUI.
+The advantage of command-line version is that it allows to apply styles quickly without going through GUI.
 
 Create a shortcut to `styler.jse` script file and rename it to “Steam Styler (Re-apply)”. Right-click the created shortcut and go to “Properties” tab. Change the “Target” field as follows:
 
