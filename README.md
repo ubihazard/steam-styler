@@ -25,7 +25,7 @@ Download the [latest release](https://github.com/ubihazard/steam-styler/releases
 
 ![Steam Styler](gallery/preview/styler.webp "Steam Styler")
 
-**Steam** must be running first before running this tool.
+**Steam** must be running first before using this tool.
 
 ![Ubi style](gallery/preview/ubi.webp "Ubi style")
 
