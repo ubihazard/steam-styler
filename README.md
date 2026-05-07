@@ -81,8 +81,3 @@ The configured (in GUI version) style can be overriden by providing it as a comm
 cd /d "C:\Steam Styler"
 wscript.exe //E:JScript //NoLogo styler.jse ubi.css
 ```
-
-⭐ Support
----------
-
-If you like [Steam Styler](https://github.com/ubihazard/steam-styler), you can [buy me a ☕](https://www.buymeacoffee.com/ubihazard "Donate")!
